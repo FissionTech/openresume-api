@@ -13,4 +13,18 @@ These regional deployments include various resources such as:
 - Application Insights
 
 To run a local regional deployment:
-`deploy-region.ps1 -Environment "dev" -IsLocal
+
+`deploy-region.ps1 -Environment <env> -RegionResourceGroups <string[]> -IsLocal`
+
+Possible acceptable values for the `Environment` switch include:
+- "dev"
+- "qa"
+- "prod"
+
+Any valid regional resource group may be provided as a value in an array of resource group names.
+
+#### Example:
+To run a local deployment in the "dev" environment for three regions:
+`.\deploy-region.ps1 -Environment dev -RegionResourceGroups mjldeus2,mjldcus2,mjldwus2 -IsLocal`
+
+In order for a deployment to be successful, it is advised to run `Connect-AzAccount` beforehand.

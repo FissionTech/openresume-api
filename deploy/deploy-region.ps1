@@ -4,7 +4,9 @@ param(
     [Parameter(Mandatory=$false)]
     [switch] $Local,
     [Parameter(Mandatory=$false)]
-    $LogFile = ""
+    $LogFile = "",
+    [Parameter(Mandatory=$true)]
+    [string[]] $RegionResourceGroups
 )
 
 function Log {
@@ -30,9 +32,7 @@ function Log {
     }
 }
 
-$regions = @("mjldcus")
-
-foreach ($region in $regions) {
+foreach ($region in $RegionResourceGroups) {
     try {
         New-AzResourceGroupDeployment -Name "RegDCUS-Dep" -ResourceGroupName $region -TemplateFile "deploy-region.bicep" -environmentName $Environment -ErrorAction Stop
     } catch {
