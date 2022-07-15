@@ -97,6 +97,10 @@ resource regionAPIM 'Microsoft.ApiManagement/service@2021-08-01' = {
 
   resource api 'apis' = {
     name: apiName
+    properties: {
+      displayName: 'APIs'
+      path: './${apiName}'
+    }
   }
 
   resource administratorsGroup 'groups' = {
