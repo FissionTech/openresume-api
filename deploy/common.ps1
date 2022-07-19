@@ -1,3 +1,36 @@
+$EnvironmentInformation = @{
+    "dev" = @{
+        EnvironmentIndicator = "d"
+    };
+    "qa" = @{
+        EnvironmentIndicator = "q"
+    };
+    "prod" = @{
+        EnvironmentIndicator = "p"
+    }
+}
+
+$LocationInformation = @{
+    "centralus" = @{
+        LocationIndicator = "cus"
+    };
+    "eastus" = @{
+        LocationIndicator = "eus"
+    };
+    "westus" = @{
+        LocationIndicator = "wus"
+    };
+    "centralus2" = @{
+        LocationIndicator = "cus2"
+    };
+    "eastus2" = @{
+        LocationIndicator = "eus2"
+    };
+    "westus2" = @{
+        LocationIndicator = "wus2"
+    }
+}
+
 function Log {
     param(
         [Parameter(Mandatory = $false, ValueFromPipeline = $false, ValueFromPipelineByPropertyName = $false, ValueFromRemainingArguments = $false)]
@@ -16,7 +49,7 @@ function Log {
         Write-Host $logLine
     }
     
-    if($LogFile -ne "") {
+    if(-not ([string]::IsNullOrEmpty($LogFile))) {
         $logLine | Out-File -Append $LogFile -ErrorAction SilentlyContinue
     }
 }

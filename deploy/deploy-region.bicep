@@ -32,22 +32,22 @@ param location string = resourceGroup().location
 
 var locationSettings = {
   eastus: {
-    locIndicator: 'e'
+    locIndicator: 'eus'
   }
   westus: {
-    locIndicator: 'w'
+    locIndicator: 'wus'
   }
   centralus: {
-    locIndicator: 'w'
+    locIndicator: 'wus'
   }
   eastus2: {
-    locIndicator: 'e2'
+    locIndicator: 'eus2'
   }
   westus2: {
-    locIndicator: 'w2'
+    locIndicator: 'wus2'
   }
   centralus2: {
-    locIndicator: 'c2'
+    locIndicator: 'cus2'
   }
 }
 
@@ -99,45 +99,25 @@ resource regionAPIM 'Microsoft.ApiManagement/service@2021-08-01' = {
     name: apiName
     properties: {
       displayName: 'APIs'
-      path: './${apiName}'
+      path: apimName
+      protocols: [
+        'http'
+        'https'
+      ]
     }
   }
 
-  resource administratorsGroup 'groups' = {
-    name: 'Administrators'
-    properties: {
-      displayName: 'Administrators'
-      type: 'system'
-    }
-  }
-
-  resource developersGroup 'groups' = {
-    name: 'Developers'
-    properties: {
-      displayName: 'Developers'
-      type: 'system'
-    }
-  }
-
-  resource guestsGroup 'groups' = {
-    name: 'Guests'
-    properties: {
-      displayName: 'Guests'
-      type: 'system'
-    }
-  }
-
-  resource portalSettingsDelegation 'portalsettings' = {
-    name: 'delegation'
-    properties: {
-      subscriptions: {
-        enabled: false
-      }
-      userRegistration: {
-        enabled: false
-      }
-    }
-  }
+  // resource portalSettingsDelegation 'portalsettings' = {
+  //   name: 'delegation'
+  //   properties: {
+  //     subscriptions: {
+  //       enabled: false
+  //     }
+  //     userRegistration: {
+  //       enabled: false
+  //     }
+  //   }
+  // }
 
   resource portalSettingsSignin 'portalsettings' = {
     name: 'signin'

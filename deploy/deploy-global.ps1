@@ -2,12 +2,18 @@
 param (
     [Parameter(Mandatory = $false)]
     [string] 
-    $SubscriptionId
+    $SubscriptionId,
+    [Parameter(Mandatory = $false)]
+    [switch]
+    $SkipRegions
 )
 
 # Include common.ps1
 . .\common.ps1
 
+# ---------------------------------------------------------------------------
+# Azure Context Switch
+# ---------------------------------------------------------------------------
 if(![string]::IsNullOrEmpty($SubscriptionId)) {
     try { 
         Set-AzContext -Subscription $SubscriptionId -ErrorAction Stop
@@ -26,14 +32,30 @@ if(![string]::IsNullOrEmpty($SubscriptionId)) {
     }
 }
 
+# ---------------------------------------------------------------------------
+# Global Deployment to CentralUS
+# ---------------------------------------------------------------------------
 try {
-    New-AzSubscriptionDeployment -Name "GlobDeploy" -TemplateFile .\deploy-global.bicep -environmentName "dev" -globalLocation "centralus" -ErrorAction Stop
+    $loc = "centralus"
+    New-AzSubscriptionDeployment -Name "GlobDeploy" -TemplateFile .\deploy-global.bicep -Location $loc -environmentName "dev" -globalLocation $loc -ErrorAction Stop
     Log -Severity "INFO" "Created global deployment successfully."
 } catch {
     Log -Severity "ERR" "Unable to create global deployment."
     Log -Severity "ERR" $_
     exit 1
 }
+
+# ---------------------------------------------------------------------------
+# Regional Deployments
+# ---------------------------------------------------------------------------
+# Guard for -SkipRegions switch
+if($SkipRegions) {
+    Log -Severity "INFO" "Deployment run with '-SkipRegions' switch. No further actions necessary, terminating script."
+    Log -Severity "INFO" "Successfully deployed."
+    exit 1
+}
+
+# Code Below only run if -SkipRegions is NOT present
 
 try {
     .\deploy-region.ps1 -Environment "dev" -RegionResourceGroups "centralus","eastus2","westus2" -ErrorAction Stop

@@ -5,36 +5,21 @@ param(
     [switch] $Local,
     [Parameter(Mandatory=$false)]
     $LogFile = "",
+    [Parameter(Mandatory=$false)]
+    $RGPrefix = "mjl",
     [Parameter(Mandatory=$true)]
-    [string[]] $RegionResourceGroups
+    [string[]] $RGLocations
 )
 
-function Log {
-    param(
-        [Parameter(Mandatory = $false, ValueFromPipeline = $false, ValueFromPipelineByPropertyName = $false, ValueFromRemainingArguments = $false)]
-        [ValidateSet("ERR", "WARN", "DBG", "INFO")]
-        $Severity = "INFO",
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ValueFromRemainingArguments = $true)]
-        $Message
-    )
+. .\common.ps1
 
-    $date = Get-Date -Format "yyyy/MM/dd hh:mm:ss"
-    $logLine = "[$date] [PID:${$PID}] [$Severity] :: $Message"
-    
-    if($Severity -eq "ERR") {
-        Write-Host $logLine -BackgroundColor Red
-    } else {
-        Write-Host $logLine
-    }
-    
-    if($LogFile -ne "") {
-        $logLine | Out-File -Append $LogFile -ErrorAction SilentlyContinue
-    }
-}
-
-foreach ($region in $RegionResourceGroups) {
+foreach ($location in $RGLocations) {
     try {
-        New-AzResourceGroupDeployment -Name "RegDCUS-Dep" -ResourceGroupName $region -TemplateFile "deploy-region.bicep" -environmentName $Environment -ErrorAction Stop
+        $envIndicator = $EnvironmentInformation[$Environment].EnvironmentIndicator
+        $locIndicator = $LocationInformation[$location].LocationIndicator
+        $rgName = "$rgPrefix$envIndicator$locIndicator"
+
+        New-AzResourceGroupDeployment -Name "RegDep" -ResourceGroupName $rgName -TemplateFile "deploy-region.bicep" -environmentName $Environment -ErrorAction Stop
     } catch {
         Log -Severity ERR "Failed to deploy to region $region."
         Log -Severity ERR "Exception: $_"

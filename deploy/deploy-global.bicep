@@ -40,22 +40,22 @@ param globalLocation string
 
 var locationSettings = {
   eastus: {
-    locIndicator: 'e'
+    locIndicator: 'eus'
   }
   westus: {
-    locIndicator: 'w'
+    locIndicator: 'wus'
   }
   centralus: {
-    locIndicator: 'w'
+    locIndicator: 'cus'
   }
   eastus2: {
-    locIndicator: 'e2'
+    locIndicator: 'eus2'
   }
   westus2: {
-    locIndicator: 'w2'
+    locIndicator: 'wus2'
   }
   centralus2: {
-    locIndicator: 'c2'
+    locIndicator: 'cus2'
   }
 }
 

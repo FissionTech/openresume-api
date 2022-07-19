@@ -25,6 +25,7 @@ Any valid regional resource group may be provided as a value in an array of reso
 
 #### Example:
 To run a local deployment in the "dev" environment for three regions:
+
 `.\deploy-region.ps1 -Environment dev -RegionResourceGroups mjldeus2,mjldcus2,mjldwus2 -IsLocal`
 
 In order for a deployment to be successful, it is advised to run `Connect-AzAccount` beforehand.
