@@ -1,18 +1,29 @@
 param(
     [Parameter(Mandatory=$true)]
+    [string]
     $Environment,
+
     [Parameter(Mandatory=$false)]
-    [switch] $Local,
+    [switch]
+    $Local,
+
     [Parameter(Mandatory=$false)]
+    [string]
     $LogFile = "",
+
     [Parameter(Mandatory=$false)]
+    [string]
     $RGPrefix = "mjl",
+
     [Parameter(Mandatory=$true)]
     [string[]] $RGLocations
+    
 )
 
+# Source Common
 . .\common.ps1
 
+# Deploy Resources via Bicep
 foreach ($location in $RGLocations) {
     try {
         $envIndicator = $EnvironmentInformation[$Environment].EnvironmentIndicator

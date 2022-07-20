@@ -6,6 +6,17 @@
 ])
 param environmentName string
 
+@description('Location for all resources.')
+param location string = resourceGroup().location
+
+@description('The storage account type to use when creating storage for function apps.')
+@allowed([
+  'Standard_LRS'
+  'Standard_GRS'
+  'Standard_RAGRS'
+])
+param funcAppStorageAccountType string = 'Standard_LRS'
+
 var environmentSettings = {
   dev: {
     envIndicator: 'd'
@@ -26,9 +37,6 @@ var environmentSettings = {
     SKU_APIM_Capacity: 1
   }
 }
-
-@description('Location for all resources.')
-param location string = resourceGroup().location
 
 var locationSettings = {
   eastus: {
@@ -51,23 +59,77 @@ var locationSettings = {
   }
 }
 
-var environment = environmentSettings[environmentName]
+var deploymentEnv = environmentSettings[environmentName]
 var locationInfo = locationSettings[location]
 
+// General Variables
 var primaryContactName = 'Michael Lindsay'
 var primaryContactEmail = 'michael.lindsay.j@gmail.com'
 var webappName = 'openresume-api'
-var aspName = 'mjl${environment.envIndicator}${locationInfo.locIndicator}asp-${webappName}'
-var apimName = 'mjl${environment.envIndicator}${locationInfo.locIndicator}apim-${webappName}'
+
+// App Service Plan / Function App Variables
+var aspName = 'mjl${deploymentEnv.envIndicator}${locationInfo.locIndicator}asp-${webappName}'
+var functionAppName = 'mjl${deploymentEnv.envIndicator}${locationInfo.locIndicator}-${webappName}-func'
+var functionAppRuntime = '.NET'
+
+// Function App Storage Acct.
+var functionAppStorageAccountName = '${deploymentEnv.envIndicator}${locationInfo.locIndicator}funcstor'
+
+// APIM Variables
+var apimName = 'mjl${deploymentEnv.envIndicator}${locationInfo.locIndicator}apim-${webappName}'
 var apiName = 'openresume'
+
+resource functionAppStorageAccount 'Microsoft.Storage/storageAccounts@2021-09-01' = {
+  name: functionAppStorageAccountName
+  location: location
+  sku: {
+    name: funcAppStorageAccountType
+  }
+  kind: 'Storage'
+}
 
 resource regionASP 'Microsoft.Web/serverfarms@2022-03-01' = {
   name: aspName
   location: location
   sku: {
-    name: environment.SKU_ASP
+    name: deploymentEnv.SKU_ASP
   }
   kind: 'functionapp'
+}
+
+resource functionApp 'Microsoft.Web/sites@2022-03-01' = {
+  name: functionAppName
+  kind: 'functionapp'
+  location: location
+  identity: {
+    type: 'SystemAssigned'
+  }
+  properties: {
+    serverFarmId: regionASP.id
+    siteConfig: {
+      appSettings: [
+        {
+          name: 'AzureWebJobsStorage'
+          value: 'DefaultEndpointsProtocol=https;AccountName=${functionAppStorageAccountName};EndpointSuffix=${environment().suffixes.storage};AccountKey=${functionAppStorageAccount.listKeys().keys[0].value}'
+        }
+        {
+          name: 'FUNCTIONS_EXTENSION_VERSION'
+          value: '~2'
+        }
+        {
+          name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
+          value: 'placeholder'
+        }
+        {
+          name: 'FUNCTIONS_WORKER_RUNTIME'
+          value: functionAppRuntime
+        }
+      ]
+      minTlsVersion: '1.2'
+      ftpsState: 'FtpsOnly'
+    }
+    httpsOnly: true
+  }
 }
 
 resource regionAPIM 'Microsoft.ApiManagement/service@2021-08-01' = {
@@ -91,8 +153,8 @@ resource regionAPIM 'Microsoft.ApiManagement/service@2021-08-01' = {
     publicNetworkAccess: 'Enabled'
   }
   sku: {
-    name: environment.SKU_APIM
-    capacity: environment.SKU_APIM_Capacity
+    name: deploymentEnv.SKU_APIM
+    capacity: deploymentEnv.SKU_APIM_Capacity
   }
 
   resource api 'apis' = {
