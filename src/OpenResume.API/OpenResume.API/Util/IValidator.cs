@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace OpenResume.API.Util
 {
-    internal interface IValidator<TSource, TResult>
+    public interface IValidator<TSource, TResult>
     {
         Task<bool> IsValid(TSource value);
 

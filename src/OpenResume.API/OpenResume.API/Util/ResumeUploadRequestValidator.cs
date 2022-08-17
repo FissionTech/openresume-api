@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace OpenResume.API.Util
 {
-    public class ResumeUploadRequestValidator : IHttpRequestValidator
+    public class ResumeUploadRequestValidator : IValidator<HttpRequest, JObject?>
     {
-        public override async Task<bool> IsValid(HttpRequest value) {
+        public async Task<bool> IsValid(HttpRequest value) {
 
             // Ensure that we have a body
             if (value.Body.Length <= 0) return false;
@@ -26,7 +26,7 @@ namespace OpenResume.API.Util
             return true;
         }
 
-        public override async Task<(bool success, JObject? result, Exception? exception)> TryParse(HttpRequest value) {
+        public async Task<(bool success, JObject? result, Exception? exception)> TryParse(HttpRequest value) {
             // Ensure that we have a body
             if (value.Body.Length <= 0) return (false, null, null);
 
