@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Azure.Storage.Blobs;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,6 +30,7 @@ namespace OpenResume.API.Functions
             builder.Services.AddSingleton<IValidator<HttpRequest, JObject?>, ResumeUploadRequestValidator>( s => {
                 return new ResumeUploadRequestValidator();
             });
+
         }
     }
 }
