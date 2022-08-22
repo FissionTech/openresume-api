@@ -5,6 +5,7 @@
 
 # Deployment Files
 deploy/*local*
+deploy/deploy-region.json
 
 # User-specific files
 *.rsuser
