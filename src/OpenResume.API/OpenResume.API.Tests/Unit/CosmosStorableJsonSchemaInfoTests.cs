@@ -36,8 +36,7 @@ namespace OpenResume.API.Tests.Unit
 						""examples"": [
 
 							""test""
-						],
-						""pattern"": "" ^.* $""
+						]
 
 					},
 					""key1"": {
@@ -47,8 +46,7 @@ namespace OpenResume.API.Tests.Unit
 						""default"": """",
 						""examples"": [
 							""test""
-						],
-						""pattern"": ""^.*$""
+						]
 					},
 					""key2"": {
 						""$id"": ""#root/key2"", 
@@ -57,8 +55,7 @@ namespace OpenResume.API.Tests.Unit
 						""default"": """",
 						""examples"": [
 							""test""
-						],
-						""pattern"": ""^.*$""
+						]
 					}
 				}
 			}

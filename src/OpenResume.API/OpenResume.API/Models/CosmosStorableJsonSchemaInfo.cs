@@ -49,12 +49,15 @@ namespace OpenResume.API.Models
 
         public bool TryValidate(JToken token)
         {
+            IList<ValidationError> errors;
+
             if (token.TryGetKey(PartitionKeyInfo.PartitionKeyName, out JToken? partitionKeyValueToken))
             {
                 if (partitionKeyValueToken is null || partitionKeyValueToken.Type != JTokenType.String)
                     return false;
 
-                return token.IsValid(Schema);
+                bool success = token.IsValid(Schema, out errors);
+                return success;
             }
             
             return false;
