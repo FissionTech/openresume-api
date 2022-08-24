@@ -29,7 +29,7 @@ namespace OpenResume.API.Tests.Unit
                 "key2"
             };
 
-            JSONSyntheticPartitionKeyInfo info = new JSONSyntheticPartitionKeyInfo(
+            PartitionKeyInfo info = new PartitionKeyInfo(
                 "partitionKey",
                 keys);
 
@@ -65,7 +65,7 @@ namespace OpenResume.API.Tests.Unit
                 { "key3", jToken => $"-{jToken["key4"]}-{jToken["key5"]}" }
             };
 
-            JSONSyntheticPartitionKeyInfo info = new JSONSyntheticPartitionKeyInfo(
+            PartitionKeyInfo info = new PartitionKeyInfo(
                 "partitionKey",
                 converterDict);
 
@@ -101,7 +101,7 @@ namespace OpenResume.API.Tests.Unit
                 { "key3", jToken => $"-{jToken["key4"]}-{jToken["key5"]}" }
             };
 
-            JSONSyntheticPartitionKeyInfo info = new JSONSyntheticPartitionKeyInfo(
+            PartitionKeyInfo info = new PartitionKeyInfo(
                 "partitionKey",
                 converterDict);
 
@@ -129,7 +129,7 @@ namespace OpenResume.API.Tests.Unit
                 { "key2", jToken => jToken.ToString() }
             };
 
-            JSONSyntheticPartitionKeyInfo info = new JSONSyntheticPartitionKeyInfo(
+            PartitionKeyInfo info = new PartitionKeyInfo(
                 "partitionKey",
                 converterDict);
 

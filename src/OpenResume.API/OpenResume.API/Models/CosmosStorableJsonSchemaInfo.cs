@@ -11,16 +11,14 @@ using System.Threading.Tasks;
 
 namespace OpenResume.API.Models
 {
-    public class CosmosStorableJsonSchemaInfo
+    public class CosmosStorableJsonSchemaInfo<T>
     {
 
         public readonly JSchema Schema;
 
-        private readonly JSONSyntheticPartitionKeyInfo PartitionKeyInfo;
+        public readonly PartitionKeyInfo PartitionKeyInfo;
 
-        private readonly JSchemaUrlResolver _schemaResolver;
-
-        public CosmosStorableJsonSchemaInfo(string jsonSchemaString, JSONSyntheticPartitionKeyInfo partitionKeyInfo)
+        public CosmosStorableJsonSchemaInfo(string jsonSchemaString, PartitionKeyInfo partitionKeyInfo)
         {
 
             // Attempt to parse JSON Schema
@@ -32,8 +30,6 @@ namespace OpenResume.API.Models
                     $"Provided Schema {jsonSchemaString} is not valid.");
 
             PartitionKeyInfo = partitionKeyInfo;
-
-            _schemaResolver = new JSchemaUrlResolver();
         }
 
         public bool TryValidate(string json)

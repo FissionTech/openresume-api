@@ -9,20 +9,40 @@ using System.Threading.Tasks;
 
 namespace OpenResume.API.Models
 {
-    public class JSONSyntheticPartitionKeyInfo
+    public class PartitionKeyInfo
     {
+        #region Properties
+        public Dictionary<string, Func<JToken, string>> SubKeysAndStringConverters { get; set; }
+        #endregion
 
+        #region Public Fields
         public readonly string PartitionKeyName;
+        #endregion
 
-        public readonly Dictionary<string, Func<JToken, string>> SubKeysAndStringConverters;
+        #region Private Fields
+        public readonly PartitionKeyType KeyType;
+        #region
 
-        public JSONSyntheticPartitionKeyInfo(string partitionKeyName, Dictionary<string, Func<JToken, string>> keyConverterDictionary)
+        public PartitionKeyInfo(string partitionKeyName) : this(partitionKeyName, PartitionKeyType.ActualPath, new Dictionary<string, Func<JToken, string>>()) { }
+
+        public PartitionKeyInfo(string partitionKeyName, PartitionKeyType partitionKeyType, Dictionary<string, Func<JToken, string>> keyConverterDict)
+        {
+            if (partitionKeyType == PartitionKeyType.Synthetic && (keyConverterDict == null || keyConverterDict.Count() == 0))
+                throw new InvalidPartitionKeyException();
+
+            PartitionKeyName = partitionKeyName;
+            KeyType = partitionKeyType;
+
+            SubKeysAndStringConverters = keyConverterDict;
+        }
+
+        public PartitionKeyInfo(string partitionKeyName, Dictionary<string, Func<JToken, string>> keyConverterDictionary)
         {
             PartitionKeyName = partitionKeyName;
             SubKeysAndStringConverters = keyConverterDictionary;
         }
 
-        public JSONSyntheticPartitionKeyInfo(string partitionKeyName, ICollection<string> keys)
+        public PartitionKeyInfo(string partitionKeyName, ICollection<string> keys)
         {
             PartitionKeyName = partitionKeyName;
 

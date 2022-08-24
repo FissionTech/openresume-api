@@ -72,7 +72,7 @@ namespace OpenResume.API.Tests.Unit
 			";
 
 			CosmosStorableJsonSchemaInfo schemaInfo = new CosmosStorableJsonSchemaInfo(
-				schema, new JSONSyntheticPartitionKeyInfo("partitionKey", new List<string>() { 
+				schema, new PartitionKeyInfo("partitionKey", new List<string>() { 
 					"key1", "key2" 
 				}));
 
