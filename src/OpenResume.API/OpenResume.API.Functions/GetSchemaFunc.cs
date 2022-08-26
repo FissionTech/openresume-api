@@ -22,14 +22,17 @@ namespace OpenResume.API.Functions
             _schemaRetrievalService = schemaRetrievalService;
         }
 
-        [FunctionName("GetSchemaFunc")]
+        [FunctionName("schema")]
         public async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req,
             ILogger log)
         {
+            var queryParamDict = req.GetQueryParameterDictionary();
+            string schemaName = queryParamDict["schema"];
+            string schemaVer = queryParamDict["schemaVer"];
             try
             {
-                var schema = await _schemaRetrievalService.GetSchemaAsync("testschema", "2022-08-26");
+                var schema = await _schemaRetrievalService.GetSchemaAsync(schemaName, schemaVer);
                 return new OkObjectResult(schema);
             } catch
             {
