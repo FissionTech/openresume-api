@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenResume.API", "OpenResum
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenResume.API.Functions", "OpenResume.API.Functions\OpenResume.API.Functions.csproj", "{0272A2C8-72A6-4FCA-A563-C08744CB1F6A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenResume.API.Tests", "OpenResume.API.Tests\OpenResume.API.Tests.csproj", "{DE7DBC4C-E439-4DBD-B3EE-3B915E74ADD4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenResume.API.Tests", "OpenResume.API.Tests\OpenResume.API.Tests.csproj", "{DE7DBC4C-E439-4DBD-B3EE-3B915E74ADD4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

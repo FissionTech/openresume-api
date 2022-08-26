@@ -4,6 +4,8 @@ using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
+using OpenResume.API.Services;
+using OpenResume.API.Services.Interfaces;
 using OpenResume.API.Util;
 using System;
 using System.Collections.Generic;
@@ -29,6 +31,11 @@ namespace OpenResume.API.Functions
 
             builder.Services.AddSingleton<IValidator<HttpRequest, JObject?>, ResumeUploadRequestValidator>( s => {
                 return new ResumeUploadRequestValidator();
+            });
+
+            builder.Services.AddSingleton<ISchemaRetrievalService>(src =>
+            {
+                return new SchemaRetrievalService(config["GLOBAL_RESUME_STORAGE_CONNECTIONSTRING"], config["GLOBAL_RESUME_STORAGE_SCHEMA_CONTAINER"]);
             });
 
         }

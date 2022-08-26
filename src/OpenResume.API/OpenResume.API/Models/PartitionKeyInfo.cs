@@ -21,7 +21,7 @@ namespace OpenResume.API.Models
 
         #region Private Fields
         public readonly PartitionKeyType KeyType;
-        #region
+        #endregion
 
         public PartitionKeyInfo(string partitionKeyName) : this(partitionKeyName, PartitionKeyType.ActualPath, new Dictionary<string, Func<JToken, string>>()) { }
 
